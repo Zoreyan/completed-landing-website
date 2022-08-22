@@ -1,5 +1,7 @@
+from calendar import prmonth
 from django.views.generic import FormView
 from django.urls import reverse_lazy
+from django.core.mail import send_mail
 from .forms import *
 from .models import *
 # Create your views here.
@@ -12,5 +14,6 @@ class HomeView(FormView):
     success_url = reverse_lazy('home')
     
     def form_valid(self, form):
-        form = form.save()
+        send_mail(f'Hello {form.cleaned_data["name"]}', 'You have been subscribed to e-mail receivment, you will be notified when site launch', 'your gmail "man@example.com"', [form.cleaned_data['email']])
+        form.save()
         return super(HomeView, self).form_valid(form)
